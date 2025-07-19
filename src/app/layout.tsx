@@ -17,13 +17,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased bg-background text-foreground min-h-screen flex flex-col">
+      <body className="font-body antialiased bg-background text-foreground min-h-screen flex flex-col overflow-x-hidden">
         <Header />
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow w-full">{children}</main>
         <Footer />
         <Toaster />
       </body>
