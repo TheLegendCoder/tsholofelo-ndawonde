@@ -1,9 +1,12 @@
+"use client"
+
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Github } from 'lucide-react';
+import { useState } from 'react';
 
 const projects = [ 
   {
@@ -46,86 +49,127 @@ const projects = [
     imageHint: "weather forecast",
     type: "pet"
   }
-];
-
-
-import { useState } from 'react';
+] as const;
 
 const FILTERS = [
   { label: 'Professional', value: 'professional' },
   { label: 'Pet Projects', value: 'pet' },
-];
+] as const;
+
+type ProjectType = 'professional' | 'pet';
 
 export default function ProjectsPage() {
-  const [filter, setFilter] = useState<'professional' | 'pet'>('professional');
-  const filteredProjects = projects.filter(p => filter === 'professional' ? p.type === 'professional' : p.type === 'pet');
+  const [filter, setFilter] = useState<ProjectType>('professional');
+  
+  const filteredProjects = projects.filter(project => 
+    filter === 'professional' ? project.type === 'professional' : project.type === 'pet'
+  );
 
   return (
-    <div className="container max-w-6xl mx-auto py-16 md:py-24 px-4">
-      <div className="text-center mb-12">
-        <h1 className="text-5xl md:text-6xl font-extrabold font-headline mb-4">Projects</h1>
-        <p className="text-2xl text-muted-foreground max-w-3xl mx-auto mb-10">
-          A showcase of professional work and personal projects that demonstrate my skills and passion for technology.
-        </p>
-        <div className="flex justify-center mt-8">
-          <div className="flex bg-white/10 border border-white/20 rounded-full p-2 gap-2 shadow-inner">
-            <button
-              className={`px-8 py-3 rounded-full font-semibold text-lg focus:outline-none transition-all ${filter === 'professional' ? 'bg-white/20 shadow text-white' : 'text-white/70'}`}
-              onClick={() => setFilter('professional')}
-            >
-              Professional
-            </button>
-            <button
-              className={`px-8 py-3 rounded-full font-semibold text-lg focus:outline-none transition-all ${filter === 'pet' ? 'bg-white/20 shadow text-white' : 'text-white/70'}`}
-              onClick={() => setFilter('pet')}
-            >
-              Pet Projects
-            </button>
+    <div className="w-full overflow-x-hidden">
+      {/* Header Section */}
+      <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold font-headline mb-4 sm:mb-6">
+              Projects
+            </h1>
+            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 lg:mb-12">
+              A showcase of professional work and personal projects that demonstrate my skills and passion for technology.
+            </p>
+            
+            {/* Filter Buttons */}
+            <div className="flex justify-center">
+              <div className="flex bg-white/10 border border-white/20 rounded-full p-1 sm:p-2 gap-1 sm:gap-2 shadow-inner" role="group" aria-label="Project filter options">
+                {FILTERS.map((filterOption) => {
+                  const isSelected = filter === filterOption.value;
+                  return (
+                    <button
+                      key={filterOption.value}
+                      type="button"
+                      className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200 ${
+                        isSelected
+                          ? 'bg-white/20 shadow text-white' 
+                          : 'text-white/70 hover:text-white hover:bg-white/10'
+                      }`}
+                      onClick={() => setFilter(filterOption.value as ProjectType)}
+                      aria-label={`Show ${filterOption.label.toLowerCase()} projects`}
+                      data-active={isSelected}
+                    >
+                      {filterOption.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {filteredProjects.length === 0 ? (
-          <div className="col-span-full text-center text-muted-foreground text-xl py-12">No projects found for this category.</div>
-        ) : (
-          filteredProjects.map((project) => (
-            <Card key={project.title} className="flex flex-col overflow-hidden transition-transform transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/20 bg-card">
-              <CardHeader className="p-0">
-                <Image 
-                  src={project.image}
-                  alt={project.title}
-                  width={600}
-                  height={400}
-                  data-ai-hint={project.imageHint}
-                  className="object-cover w-full h-auto"
-                />
-              </CardHeader>
-              <CardContent className="p-6 flex-grow">
-                <CardTitle className="text-2xl font-bold mb-2">{project.title}</CardTitle>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-                </div>
-                <p className="text-muted-foreground">{project.description}</p>
-              </CardContent>
-              <CardFooter className="p-6 bg-card/50">
-                <div className="flex justify-between w-full">
-                  <Button asChild variant="outline">
-                    <Link href={project.liveUrl} target="_blank">
-                      <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
-                    </Link>
-                  </Button>
-                  <Button asChild variant="ghost">
-                    <Link href={project.githubUrl} target="_blank">
-                      <Github className="mr-2 h-4 w-4" /> Source Code
-                    </Link>
-                  </Button>
-                </div>
-              </CardFooter>
-            </Card>
-          ))
-        )}
-      </div>
+      {/* Projects Grid */}
+      <section className="py-16 md:py-20 lg:py-24">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {filteredProjects.length === 0 ? (
+            <div className="text-center text-muted-foreground text-lg sm:text-xl py-12 lg:py-16">
+              No projects found for this category.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-7xl mx-auto">
+              {filteredProjects.map((project) => (
+                <article key={project.title}>
+                  <Card className="flex flex-col overflow-hidden h-full transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/20 bg-card group">
+                    <CardHeader className="p-0">
+                      <div className="relative overflow-hidden">
+                        <Image 
+                          src={project.image}
+                          alt={project.title}
+                          width={600}
+                          height={400}
+                          data-ai-hint={project.imageHint}
+                          className="object-cover w-full h-48 sm:h-56 lg:h-64 transition-transform duration-300 group-hover:scale-110"
+                        />
+                      </div>
+                    </CardHeader>
+                    
+                    <CardContent className="p-4 sm:p-6 flex-grow">
+                      <CardTitle className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                        {project.title}
+                      </CardTitle>
+                      
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.tags.map(tag => (
+                          <Badge key={tag} variant="secondary" className="text-xs sm:text-sm">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                      
+                      <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
+                        {project.description}
+                      </p>
+                    </CardContent>
+                    
+                    <CardFooter className="p-4 sm:p-6 bg-card/50">
+                      <div className="flex flex-col sm:flex-row justify-between w-full gap-3 sm:gap-4">
+                        <Button asChild variant="outline" className="w-full sm:w-auto">
+                          <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
+                          </Link>
+                        </Button>
+                        <Button asChild variant="ghost" className="w-full sm:w-auto">
+                          <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                            <Github className="mr-2 h-4 w-4" /> Source Code
+                          </Link>
+                        </Button>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
