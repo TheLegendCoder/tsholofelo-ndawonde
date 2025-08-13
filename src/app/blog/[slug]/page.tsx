@@ -8,6 +8,7 @@ import { Metadata } from 'next';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import { markdownToHtml } from '@/lib/markdown';
 
 interface BlogPost {
   title: string;
@@ -94,38 +95,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-// Simple markdown to HTML converter (basic implementation)
-function markdownToHtml(markdown: string): string {
-  return markdown
-    // Headers
-    .replace(/^### (.*$)/gm, '<h3 class="text-xl font-semibold mt-8 mb-4 text-foreground">$1</h3>')
-    .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold mt-10 mb-6 text-foreground">$1</h2>')
-    .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold mt-12 mb-8 text-foreground">$1</h1>')
-    
-    // Code blocks
-    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="bg-muted p-4 rounded-lg overflow-x-auto my-6"><code class="text-sm">$2</code></pre>')
-    .replace(/`([^`]+)`/g, '<code class="bg-muted px-2 py-1 rounded text-sm font-mono">$1</code>')
-    
-    // Lists
-    .replace(/^\* (.*$)/gm, '<li class="ml-4 mb-2">$1</li>')
-    .replace(/(<li.*<\/li>)/g, '<ul class="list-disc list-inside space-y-2 my-4">$1</ul>')
-    
-    // Links
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary hover:text-primary/80 underline" target="_blank" rel="noopener noreferrer">$1</a>')
-    
-    // Bold and italic
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
-    
-    // Paragraphs
-    .replace(/\n\n/g, '</p><p class="mb-4 text-muted-foreground leading-relaxed">')
-    .replace(/^(?!<[h|u|p|c])(.+)$/gm, '<p class="mb-4 text-muted-foreground leading-relaxed">$1</p>')
-    
-    // Clean up
-    .replace(/<p class="mb-4 text-muted-foreground leading-relaxed"><\/p>/g, '')
-    .replace(/\n/g, ' ');
-}
-
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = await getBlogPost(slug);
@@ -134,7 +103,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
-  const htmlContent = markdownToHtml(post.content);
+  const htmlContent = await markdownToHtml(post.content);
   const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -201,7 +170,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <div className="max-w-4xl mx-auto">
             <Card className="p-8 md:p-12 bg-card">
               <div 
-                className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-code:text-foreground prose-pre:bg-muted prose-a:text-primary hover:prose-a:text-primary/80"
+                className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-code:text-foreground prose-pre:bg-transparent prose-a:text-primary hover:prose-a:text-primary/80 prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground"
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
               />
             </Card>

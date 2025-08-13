@@ -191,3 +191,135 @@
     @apply py-4 sm:py-6 lg:py-8;
   }
 }
+
+/* Syntax highlighting styles */
+@layer components {
+  /* Code block styles */
+  .prose pre {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto font-mono text-sm leading-relaxed;
+  }
+  
+  .prose code {
+    @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono;
+  }
+  
+  .prose pre code {
+    @apply bg-transparent p-0 text-gray-100;
+  }
+  
+  /* Highlight.js theme - VS Code Dark */
+  .hljs {
+    @apply bg-gray-900 text-gray-100;
+  }
+  
+  .hljs-comment,
+  .hljs-quote {
+    @apply text-gray-500 italic;
+  }
+  
+  .hljs-variable,
+  .hljs-template-variable,
+  .hljs-tag,
+  .hljs-name,
+  .hljs-selector-id,
+  .hljs-selector-class,
+  .hljs-regexp,
+  .hljs-deletion {
+    @apply text-red-400;
+  }
+  
+  .hljs-number,
+  .hljs-built_in,
+  .hljs-builtin-name,
+  .hljs-literal,
+  .hljs-type,
+  .hljs-params,
+  .hljs-meta,
+  .hljs-link {
+    @apply text-orange-400;
+  }
+  
+  .hljs-attribute {
+    @apply text-yellow-400;
+  }
+  
+  .hljs-string,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-addition {
+    @apply text-green-400;
+  }
+  
+  .hljs-title,
+  .hljs-section {
+    @apply text-blue-400;
+  }
+  
+  .hljs-keyword,
+  .hljs-selector-tag {
+    @apply text-purple-400;
+  }
+  
+  .hljs-emphasis {
+    @apply italic;
+  }
+  
+  .hljs-strong {
+    @apply font-bold;
+  }
+  
+  /* Custom code block with language label */
+  .code-block-wrapper {
+    @apply relative my-6;
+  }
+  
+  .code-block-header {
+    @apply bg-gray-800 text-gray-100 text-xs px-4 py-2 border-b border-gray-600 font-mono rounded-t-lg flex justify-between items-center;
+  }
+  
+  .code-block-lang {
+    @apply uppercase tracking-wide;
+  }
+  
+  .code-block-copy {
+    @apply text-gray-400 hover:text-gray-200 transition-colors cursor-pointer;
+  }
+  
+  /* SQL specific highlighting */
+  .language-sql .hljs-keyword {
+    @apply text-blue-400 font-semibold;
+  }
+  
+  .language-sql .hljs-string {
+    @apply text-green-400;
+  }
+  
+  .language-sql .hljs-comment {
+    @apply text-gray-500 italic;
+  }
+  
+  /* C# specific highlighting */
+  .language-csharp .hljs-keyword {
+    @apply text-blue-400;
+  }
+  
+  .language-csharp .hljs-built_in {
+    @apply text-cyan-400;
+  }
+  
+  .language-csharp .hljs-string {
+    @apply text-orange-300;
+  }
+  
+  .language-csharp .hljs-comment {
+    @apply text-gray-500 italic;
+  }
+  
+  .language-csharp .hljs-class .hljs-title {
+    @apply text-yellow-400;
+  }
+  
+  .language-csharp .hljs-function .hljs-title {
+    @apply text-blue-300;
+  }
+}
