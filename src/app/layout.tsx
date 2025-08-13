@@ -3,6 +3,7 @@ import './globals.css';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from "@/components/ui/toaster";
+import { NavigationProgress } from '@/components/ui/navigation-progress';
 
 export const metadata: Metadata = {
   title: 'Tsholofelo Ndawonde | Portfolio',
@@ -24,6 +25,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen flex flex-col overflow-x-hidden">
+        <NavigationProgress />
         <Header />
         <main className="flex-grow w-full">{children}</main>
         <Footer />
