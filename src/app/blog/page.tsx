@@ -7,6 +7,17 @@ import Image from 'next/image';
 
 const blogPosts = [
   {
+    title: "SQL Injection: A Comprehensive Security Guide",
+    description: "Understand SQL injection attacks, learn how to identify vulnerabilities, and implement robust prevention techniques to secure your applications.",
+    image: "https://placehold.co/600x400.png",
+    author: "Tsholofelo Ndawonde",
+    date: "August 13, 2025",
+    tags: ["Security", "SQL", "Web Development", "Cybersecurity"],
+    slug: "/blog/sql-injection-comprehensive-guide",
+    imageHint: "database security shield",
+    readTime: "18 min read"
+  },
+  {
     title: "Mastering Flexbox: A Comprehensive Guide",
     description: "Dive deep into the world of CSS Flexbox. This guide covers everything from the basics to advanced layouts, complete with practical examples.",
     image: "https://placehold.co/600x400.png",
