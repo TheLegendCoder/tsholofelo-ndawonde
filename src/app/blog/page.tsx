@@ -7,6 +7,28 @@ import Image from 'next/image';
 
 const blogPosts = [
   {
+    title: "SQL Injection: A Comprehensive Security Guide",
+    description: "Understand SQL injection attacks, learn how to identify vulnerabilities, and implement robust prevention techniques to secure your applications.",
+    image: "https://placehold.co/600x400.png",
+    author: "Tsholofelo Ndawonde",
+    date: "August 13, 2025",
+    tags: ["Security", "SQL", "Web Development", "Cybersecurity"],
+    slug: "/blog/sql-injection-comprehensive-guide",
+    imageHint: "database security shield",
+    readTime: "18 min read"
+  },
+  {
+    title: "JSON Serialization: A Complete Guide to Converting Objects and Handling Common Issues",
+    description: "A comprehensive guide to JSON serialization and deserialization, covering best practices, common issues, and practical examples for modern software development.",
+    image: "https://placehold.co/600x400.png",
+    author: "Tsholofelo Ndawonde",
+    date: "August 29, 2025",
+    tags: ["JSON", "Serialization", "C#", ".NET", "API", "Programming"],
+    slug: "/blog/json-serialization-guide",
+    imageHint: "json code",
+    readTime: "14 min read"
+  },
+  {
     title: "Mastering Flexbox: A Comprehensive Guide",
     description: "Dive deep into the world of CSS Flexbox. This guide covers everything from the basics to advanced layouts, complete with practical examples.",
     image: "https://placehold.co/600x400.png",
