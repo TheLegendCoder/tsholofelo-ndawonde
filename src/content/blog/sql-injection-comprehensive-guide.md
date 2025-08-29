@@ -46,11 +46,11 @@ If your query is insecure, this could bypass authentication and return **all use
 
 ## 🛡 1. Validate & Sanitize Inputs
 
-### ✅ Why it matters
+### ✅ Why Whitelist Validation Matters
 
 Client-side validation can be bypassed — validation must happen **server-side** to be effective.
 
-### 💻 Example
+### 💻 Whitelist Validation Example
 
 ```csharp
 [Required]
@@ -78,7 +78,7 @@ if (input.Contains("'") || input.Contains("--") || input.Contains(";"))
 
 Stored procedures **can** reduce exposure — but only when using parameterized inputs.
 
-### 💻 Example
+### 💻 Whitelist Role Example
 
 ```sql
 CREATE PROCEDURE GetUserByUsername
@@ -102,7 +102,7 @@ var user = context.Users
 
 ## 🛡 3. Enforce Whitelist Validation
 
-### 💻 Example
+### 💻 Whitelist Role Validation Example
 
 ```csharp
 var allowedRoles = new List<string> { "Admin", "User", "Guest" };
