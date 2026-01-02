@@ -1,14 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
-
 @layer base {
+  .font-display {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+  }
+
   :root {
     --background: 60 20% 99%;
     --foreground: 220 25% 10%;
-
     --card: 0 0% 100%;
     --card-foreground: 220 25% 10%;
 
