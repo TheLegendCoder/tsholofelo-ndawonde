@@ -4,14 +4,21 @@ import { cn } from "@/lib/utils"
 
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
+  React.HTMLAttributes<HTMLDivElement> & {
+    animationDelay?: string
+    interactive?: boolean
+    glow?: boolean
+  }
+>(({ className, animationDelay, interactive = false, glow = false, ...props }, ref) => (  // eslint-disable-next-line @stylistic/jsx-props-no-spreading  <div
     ref={ref}
     className={cn(
       "rounded-lg border bg-card text-card-foreground shadow-sm",
+      "transition-all duration-300",
+      interactive && "hover:shadow-lg hover:-translate-y-1 cursor-pointer hover:border-primary/50",
+      glow && "hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]",
       className
     )}
+    style={animationDelay ? { animationDelay } : undefined}
     {...props}
   />
 ))
