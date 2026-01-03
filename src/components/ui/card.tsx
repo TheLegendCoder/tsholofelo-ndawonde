@@ -9,7 +9,9 @@ const Card = React.forwardRef<
     interactive?: boolean
     glow?: boolean
   }
->(({ className, animationDelay, interactive = false, glow = false, ...props }, ref) => (  // eslint-disable-next-line @stylistic/jsx-props-no-spreading  <div
+>(({ className, animationDelay, interactive = false, glow = false, ...props }, ref) => (
+  // eslint-disable-next-line @stylistic/jsx-props-no-spreading
+  <div
     ref={ref}
     className={cn(
       "rounded-lg border bg-card text-card-foreground shadow-sm",
@@ -18,6 +20,7 @@ const Card = React.forwardRef<
       glow && "hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]",
       className
     )}
+    // eslint-disable-next-line no-inline-styles
     style={animationDelay ? { animationDelay } : undefined}
     {...props}
   />
