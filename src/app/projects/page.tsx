@@ -59,10 +59,10 @@ const FILTERS = [
 type ProjectType = 'professional' | 'pet';
 
 export default function ProjectsPage() {
-  const [filter, setFilter] = useState<ProjectType>('professional');
+  const [showPersonal, setShowPersonal] = useState(false);
   
   const filteredProjects = projects.filter(project => 
-    filter === 'professional' ? project.type === 'professional' : project.type === 'pet'
+    showPersonal ? project.type === 'pet' : project.type === 'professional'
   );
 
   return (
@@ -78,28 +78,33 @@ export default function ProjectsPage() {
               A showcase of professional work and personal projects that demonstrate my skills and passion for technology.
             </p>
             
-            {/* Filter Buttons */}
+            {/* Project Type Toggle */}
             <div className="flex justify-center">
-              <div className="flex bg-white/10 border border-white/20 rounded-full p-1 sm:p-2 gap-1 sm:gap-2 shadow-inner" role="group" aria-label="Project filter options">
-                {FILTERS.map((filterOption) => {
-                  const isSelected = filter === filterOption.value;
-                  return (
-                    <button
-                      key={filterOption.value}
-                      type="button"
-                      className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200 ${
-                        isSelected
-                          ? 'bg-white/20 shadow text-white' 
-                          : 'text-white/70 hover:text-white hover:bg-white/10'
-                      }`}
-                      onClick={() => setFilter(filterOption.value as ProjectType)}
-                      aria-label={`Show ${filterOption.label.toLowerCase()} projects`}
-                      data-active={isSelected}
-                    >
-                      {filterOption.label}
-                    </button>
-                  );
-                })}
+              <div className="inline-flex bg-gradient-to-r from-primary to-primary rounded-full p-1 shadow-lg">
+                <button
+                  type="button"
+                  onClick={() => setShowPersonal(false)}
+                  className={`px-6 sm:px-8 lg:px-10 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
+                    !showPersonal
+                      ? 'bg-background text-primary'
+                      : 'text-white/80 hover:text-white'
+                  }`}
+                  aria-label="Show professional projects"
+                >
+                  Professional
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowPersonal(true)}
+                  className={`px-6 sm:px-8 lg:px-10 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
+                    showPersonal
+                      ? 'bg-background text-primary'
+                      : 'text-white/80 hover:text-white'
+                  }`}
+                  aria-label="Show personal projects"
+                >
+                  Personal
+                </button>
               </div>
             </div>
           </div>
