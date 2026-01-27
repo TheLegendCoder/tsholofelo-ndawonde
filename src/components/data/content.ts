@@ -4,7 +4,7 @@ export const personalInfo = {
   name: "Tsholofelo Ndawonde",
   title: "Software Engineer",
   tagline: "Crafting elegant solutions through code",
-  bio: "I'm a passionate software engineer with a focus on building scalable web applications and creating exceptional user experiences. With expertise in modern technologies and a love for clean code, I turn complex problems into simple, beautiful solutions.",
+  bio: "I document what I learn while building real-world software — from scalable web apps to thoughtful product decisions. This is where I share my experiments, lessons, and projects as I grow as an engineer.",
   email: "hello@tsholofelo.dev",
   location: "Johannesburg, South Africa",
   availability: "Open to opportunities",
@@ -484,27 +484,7 @@ This creates a responsive grid that automatically adjusts columns based on avail
 ];
 
 export const aboutContent = {
-  intro: "Hi, I'm Tsholofelo Ndawonde, a software engineer based in Johannesburg, South Africa. I specialize in building modern web applications that are both beautiful and functional.",
-  story: "My journey into software development started with a curiosity about how websites work. That curiosity evolved into a passion for creating digital experiences that make a difference in people's lives. Today, I focus on building scalable applications using modern technologies like React, TypeScript, and Node.js.",
-  approach: "I believe in writing clean, maintainable code and creating intuitive user experiences. Every project is an opportunity to learn something new and push the boundaries of what's possible on the web.",
-  experience: [
-    {
-      role: "Senior Software Engineer",
-      company: "Tech Company",
-      period: "2022 - Present",
-      description: "Leading frontend development for a SaaS platform serving thousands of users.",
-    },
-    {
-      role: "Software Engineer",
-      company: "Startup Inc",
-      period: "2020 - 2022",
-      description: "Built and maintained multiple client-facing web applications.",
-    },
-    {
-      role: "Junior Developer",
-      company: "Agency XYZ",
-      period: "2018 - 2020",
-      description: "Developed websites and web applications for various clients.",
-    },
-  ],
+  intro: "Hi, I’m Tsholofelo Ndawonde — a software engineer based in Johannesburg, South Africa.",
+  story: "This website is my personal knowledge hub. I use it to document what I’m learning, share insights from projects I’m working on, and reflect on my growth as a software engineer.",
+  approach: "My journey into software development started with curiosity about how websites work. Over time, that curiosity turned into a habit of building, experimenting, and learning by doing. Today, I focus on creating modern, scalable web applications using technologies like React, TypeScript, and Node.js.\n\nI believe learning is most powerful when it’s shared. Writing helps me think clearly, and building projects helps me test ideas in the real world. Every post and project here represents something I’ve learned — whether it worked perfectly or failed in an interesting way.\n\nIf you’re also learning, building, or figuring things out as you go, you’re in the right place."
 };

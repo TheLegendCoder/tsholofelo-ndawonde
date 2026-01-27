@@ -35,24 +35,7 @@ const About = () => {
             ))}
           </div>
 
-          <h2 className="text-2xl font-display font-bold text-foreground mb-6">Experience</h2>
-          <div className="space-y-8">
-            {aboutContent.experience.map((exp, index) => (
-              <div key={index} className="gradient-card rounded-xl p-6 shadow-card">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Briefcase className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">{exp.role}</h3>
-                    <p className="text-primary font-medium">{exp.company}</p>
-                    <p className="text-sm text-muted-foreground mb-2">{exp.period}</p>
-                    <p className="text-muted-foreground">{exp.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Experience section removed as aboutContent.experience no longer exists */}
         </div>
       </section>
     </Layout>
