@@ -18,10 +18,10 @@ const projects = [
   {
     title: "Portfolio Website",
     description: "My personal portfolio site to showcase my skills and projects. Designed with attention to detail and built with Next.js, TypeScript, and Tailwind CSS for a modern, responsive experience.",
-    image: "https://placehold.co/600x400.png",
+    image: "https://djfeucuujeenuvappydk.supabase.co/storage/v1/object/public/public-images/personal-website/snapshot.png",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
     liveUrl: "#",
-    githubUrl: "#",
+    githubUrl: "https://github.com/TheLegendCoder/tsholofelo-ndawonde",
     imageHint: "personal website",
     type: "professional"
   }

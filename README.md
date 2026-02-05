@@ -1,6 +1,6 @@
 # Tsholofelo Ndawonde - Personal Portfolio
 
-Personal portfolio website built with Next.js 15+, TypeScript, Tailwind CSS, and Firebase hosting. Features a blog system with MDX support, project showcase, and comprehensive SEO implementation.
+Personal portfolio website built with Next.js 15+, TypeScript, Tailwind CSS, and Radix UI components. Features a comprehensive blog system with MDX support, project showcase, and advanced SEO implementation.
 
 ## Tech Stack
 
@@ -11,7 +11,14 @@ Personal portfolio website built with Next.js 15+, TypeScript, Tailwind CSS, and
 - **Content**: MDX for blogs with gray-matter frontmatter
 - **Icons**: Lucide React
 - **Forms**: React Hook Form + Zod validation
-- **Hosting**: Firebase
+- **Markdown Processing**: Remark + Rehype with syntax highlighting
+- **Animations**: Canvas confetti for celebration effects, custom CSS animations
+- **Utilities**: 
+  - `date-fns` for date formatting
+  - `embla-carousel-react` for responsive carousel components
+  - `recharts` for data visualization and charts
+  - `@tailwindcss/typography` for prose/markdown styling
+- **SDK**: Firebase SDK installed (not actively deployed)
 
 ## Getting Started
 
@@ -55,7 +62,6 @@ Open [http://localhost:9003](http://localhost:9003) in your browser.
 ```bash
 npm run dev              # Start Next.js dev server on port 9003 with Turbopack
 npm run build            # Production build
-npm run genkit:dev       # Start Genkit AI dev server
 npm run typecheck        # Run TypeScript type checking
 npm run lint             # Run ESLint
 ```
@@ -181,17 +187,24 @@ Edit `src/components/data/content.ts`:
 ## Deployment
 
 This site is configured for Firebase hosting:
-
-1. Build the production version:
+### Build
 ```bash
 npm run build
 ```
 
-2. Deploy to Firebase (if configured):
-```bash
-firebase deploy
-```
+### Hosting Options
 
+**Firebase App Hosting** (configured but not currently deployed):
+- `apphosting.yaml` is configured for Firebase App Hosting
+- Firebase SDK is installed for future deployment
+- To deploy to Firebase when ready:
+  ```bash
+  firebase deploy
+  ```
+
+**Other Hosting**:
+- The static build output in `.next/` is compatible with any Node.js hosting platform
+- Can be deployed to Vercel, Netlify, AWS, Azure, or other services
 ## License
 
 Personal portfolio - all rights reserved.
