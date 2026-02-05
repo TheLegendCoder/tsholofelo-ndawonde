@@ -1,12 +1,16 @@
+'use client';
+
 import Link from "next/link";
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 import { personalInfo } from "@/components/data/content";
+import { useToast } from "@/hooks/use-toast";
+import { triggerCelebrationFrom } from "@/lib/utils";
 
 const socialLinks = [
   { name: "GitHub", icon: Github, url: personalInfo.socialLinks.github },
   { name: "LinkedIn", icon: Linkedin, url: personalInfo.socialLinks.linkedin },
   { name: "Twitter", icon: Twitter, url: personalInfo.socialLinks.twitter },
-  { name: "Email", icon: Mail, url: `mailto:${personalInfo.email}` },
+  { name: "Email", icon: Mail, url: `mailto:${personalInfo.email}`, email: true },
 ];
 
 const footerLinks = [
@@ -20,6 +24,34 @@ const footerLinks = [
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const { toast } = useToast();
+
+  const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>, email: string) => {
+    e.preventDefault();
+    
+    // Copy email to clipboard
+    navigator.clipboard.writeText(email).then(() => {
+      const target = e.currentTarget;
+      
+      // Trigger celebration
+      triggerCelebrationFrom(target, { intensity: 'low' });
+      
+      // Show success toast
+      toast({
+        variant: "success",
+        title: "Email copied! ✨",
+        description: `${email} is ready to paste`,
+        duration: 3000,
+      });
+    }).catch(() => {
+      toast({
+        variant: "destructive",
+        title: "Couldn't copy email",
+        description: "Please try again",
+        duration: 3000,
+      });
+    });
+  };
 
   return (
     <footer className="bg-secondary/30 border-t border-border">
@@ -62,8 +94,9 @@ export function Footer() {
                 <a
                   key={social.name}
                   href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={social.email ? undefined : "_blank"}
+                  rel={social.email ? undefined : "noopener noreferrer"}
+                  onClick={social.email ? (e) => handleEmailClick(e, personalInfo.email) : undefined}
                   className="p-2 rounded-lg bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-all duration-200"
                   aria-label={social.name}
                 >

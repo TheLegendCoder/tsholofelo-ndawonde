@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import "./globals.css";
 import { Navbar } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { Toaster } from "@/components/ui/toaster";
 
 interface LayoutProps {
   children: ReactNode;
@@ -23,6 +24,7 @@ export default function Layout({ children }: LayoutProps) {
             {children}
           </main>
           <Footer />
+          <Toaster />
         </div>
       </body>
     </html>

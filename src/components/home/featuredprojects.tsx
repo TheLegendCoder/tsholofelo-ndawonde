@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectCard } from "@/components/projects/projectcards";
 import { projects } from "@/components/data/content";
+import { StaggerContainer } from "@/components/ui/stagger";
 
 export function FeaturedProjects() {
 	const featuredProjects = projects.filter((project) => project.featured);
@@ -20,12 +21,16 @@ export function FeaturedProjects() {
 					</p>
 				</div>
 
-				{/* Projects Grid */}
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+				{/* Projects Grid with Stagger Animation */}
+				<StaggerContainer 
+					variant="slide-up" 
+					delayChildren={100}
+					className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
+				>
 					{featuredProjects.map((project) => (
 						<ProjectCard key={project.id} {...project} />
 					))}
-				</div>
+				</StaggerContainer>
 
 				{/* View All Button */}
 				<div className="text-center">

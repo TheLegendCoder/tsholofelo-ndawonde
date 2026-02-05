@@ -1,17 +1,42 @@
-import { ProjectCard } from "@/components/projects/projectcards";
-import { projects } from "@/components/data/content";
+'use client';
+
 import Link from "next/link";
 import { ArrowRight, Github, Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { personalInfo, skills } from "@/components/data/content";
+import { personalInfo, skills, projects } from "@/components/data/content";
+import { StaggerContainer } from "@/components/ui/stagger";
+import { ProjectCard } from "@/components/projects/projectcards";
+import { useState, useEffect } from "react";
 
 export function Hero() {
+	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+	const [isHovering, setIsHovering] = useState(false);
+
+	useEffect(() => {
+		const handleMouseMove = (e: MouseEvent) => {
+			if (isHovering) {
+				const nameElement = document.getElementById('hero-name');
+				if (nameElement) {
+					const rect = nameElement.getBoundingClientRect();
+					const centerX = rect.left + rect.width / 2;
+					const centerY = rect.top + rect.height / 2;
+					const deltaX = (e.clientX - centerX) / 20;
+					const deltaY = (e.clientY - centerY) / 20;
+					setMousePosition({ x: deltaX, y: deltaY });
+				}
+			}
+		};
+
+		window.addEventListener('mousemove', handleMouseMove);
+		return () => window.removeEventListener('mousemove', handleMouseMove);
+	}, [isHovering]);
+
 	return (
 		<section className="gradient-hero w-full min-h-[90vh] flex items-center py-20 px-0">
 			<div className="w-full flex justify-center">
 				<div className="w-full max-w-4xl text-center px-4 sm:px-6 lg:px-8 mx-auto">
-					{/* Availability badge */}
-					<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-8 animate-fade-up">
+					{/* Availability badge with float animation */}
+					<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-8 animate-fade-up animate-float">
 						<span className="relative flex h-2 w-2">
 							<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
 							<span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
@@ -19,12 +44,24 @@ export function Hero() {
 						{personalInfo.availability}
 					</div>
 
-					{/* Main heading */}
+					{/* Main heading with cursor-follow effect */}
 					<h1
 						className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-foreground leading-tight mb-6 animate-fade-up [animation-delay:0.1s]"
 					>
 						Hi, I'm{" "}
-						<span className="text-gradient">{personalInfo.name.split(" ")[0]}</span>
+						<span 
+							id="hero-name"
+							className="text-gradient cursor-pointer transition-transform duration-200 ease-out inline-block"
+							onMouseEnter={() => setIsHovering(true)}
+							onMouseLeave={() => {
+								setIsHovering(false);
+								setMousePosition({ x: 0, y: 0 });
+							}}
+							data-x={mousePosition.x}
+							data-y={mousePosition.y}
+						>
+							{personalInfo.name.split(" ")[0]}
+						</span>
 						<br />
 						<span className="text-muted-foreground">{personalInfo.title}</span>
 					</h1>
@@ -84,21 +121,25 @@ export function Hero() {
 						</a>
 					</div>
 
-					{/* Skills ticker */}
+					{/* Skills ticker with stagger animation */}
 					<div
 						className="mt-16 animate-fade-up [animation-delay:0.5s]"
 					>
 						<p className="text-sm text-muted-foreground mb-4">Technologies I work with</p>
-						<div className="flex flex-wrap items-center justify-center gap-3">
-							{skills.map((skill, index) => (
+						<StaggerContainer
+							variant="fade"
+							delayChildren={600}
+							className="flex flex-wrap items-center justify-center gap-3"
+						>
+							{skills.map((skill) => (
 								<span
 									key={skill}
-									className={`px-4 py-2 rounded-full bg-card shadow-soft text-sm font-medium text-foreground hover:shadow-hover hover:-translate-y-0.5 transition-all duration-200 animate-fade-up [animation-delay:${0.6 + index * 0.05}s]`}
+									className="px-4 py-2 rounded-full bg-card shadow-soft text-sm font-medium text-foreground hover:shadow-hover hover:-translate-y-0.5 transition-all duration-200"
 								>
 									{skill}
 								</span>
 							))}
-						</div>
+						</StaggerContainer>
 					</div>
 				</div>
 			</div>
@@ -108,7 +149,7 @@ export function Hero() {
 
 
 export function FeaturedProjects() {
-	const featuredProjects = projects.filter((project) => project.featured);
+	const featuredProjects = projects.filter((project: typeof projects[number]) => project.featured);
 
 	return (
 		<section className="py-20 bg-secondary/20">
