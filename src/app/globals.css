@@ -157,6 +157,61 @@
   }
 }
 
+/* Highlight.js code block styling for blog posts */
+@layer components {
+  pre {
+    @apply overflow-x-auto;
+  }
+
+  pre code {
+    @apply !bg-transparent !p-0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  pre code.hljs {
+    @apply block w-full;
+  }
+
+  /* Syntax highlighting colors for atom-one-dark theme */
+  .hljs-attr,
+  .hljs-attribute {
+    @apply text-[#e06c75];
+  }
+
+  .hljs-string {
+    @apply text-[#98c379];
+  }
+
+  .hljs-number {
+    @apply text-[#d19a66];
+  }
+
+  .hljs-literal,
+  .hljs-type,
+  .hljs-title,
+  .hljs-class {
+    @apply text-[#61afef];
+  }
+
+  .hljs-keyword {
+    @apply text-[#c678dd];
+  }
+
+  .hljs-function {
+    @apply text-[#61afef];
+  }
+
+  .hljs-comment {
+    @apply text-[#5c6370];
+  }
+
+  .hljs-symbol,
+  .hljs-meta {
+    @apply text-[#56b6c2];
+  }
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
