@@ -14,44 +14,14 @@ import { EmptyState } from '@/components/ui/empty-state';
 
 const projects = [ 
   {
-    title: "E-commerce Platform",
-    description: "A full-featured e-commerce site with product listings, a shopping cart, and a secure checkout process. Built with Next.js and Stripe integration.",
-    image: "https://placehold.co/600x400.png",
-    tags: ["Next.js", "React", "Stripe", "TailwindCSS"],
-    liveUrl: "#",
-    githubUrl: "#",
-    imageHint: "online store",
-    type: "professional"
-  },
-  {
-    title: "Task Management App",
-    description: "A collaborative task management tool that helps teams organize their work, track progress, and meet deadlines. Features real-time updates.",
-    image: "https://placehold.co/600x400.png",
-    tags: ["React", "Firebase", "Node.js", "Express"],
-    liveUrl: "#",
-    githubUrl: "#",
-    imageHint: "project management",
-    type: "professional"
-  },
-  {
     title: "Portfolio Website",
-    description: "My personal portfolio site (the one you're on right now!) to showcase my skills and projects. Designed in Figma and built with Next.js.",
+    description: "My personal portfolio site to showcase my skills and projects. Designed with attention to detail and built with Next.js, TypeScript, and Tailwind CSS for a modern, responsive experience.",
     image: "https://placehold.co/600x400.png",
-    tags: ["Next.js", "Figma", "TypeScript"],
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
     liveUrl: "#",
     githubUrl: "#",
     imageHint: "personal website",
-    type: "pet"
-  },
-  {
-    title: "Weather App",
-    description: "A simple and elegant weather application that provides real-time weather data for any location, using a third-party weather API.",
-    image: "https://placehold.co/600x400.png",
-    tags: ["React", "API", "CSS"],
-    liveUrl: "#",
-    githubUrl: "#",
-    imageHint: "weather forecast",
-    type: "pet"
+    type: "professional"
   }
 ] as const;
 
@@ -67,7 +37,7 @@ export default function ProjectsPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { toast } = useToast();
   
-  const filteredProjects = projects.filter(project => 
+  const filteredProjects = projects.filter((project: typeof projects[number] | { type: 'pet' | 'professional' }) => 
     showPersonal ? project.type === 'pet' : project.type === 'professional'
   );
 
