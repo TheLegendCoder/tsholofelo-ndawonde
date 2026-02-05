@@ -53,41 +53,21 @@ async function BlogPage() {
             </p>
           </div>
 
-          {/* Featured Post */}
-          {posts.length > 0 && (
-            <div className="mb-20">
-              {posts[0] && (
-                <BlogCard
-                  id={posts[0].slug}
-                  title={posts[0].title}
-                  excerpt={posts[0].description}
-                  image={posts[0].image}
-                  date={posts[0].date}
-                  readTime={posts[0].readTime}
-                  category={posts[0].tags[0] || "Article"}
-                  featured
-                />
-              )}
-            </div>
-          )}
-
-          {/* Blog Grid */}
-          {posts.length > 1 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {posts.slice(1).map((post) => (
-                <BlogCard
-                  key={post.slug}
-                  id={post.slug}
-                  title={post.title}
-                  excerpt={post.description}
-                  image={post.image}
-                  date={post.date}
-                  readTime={post.readTime}
-                  category={post.tags[0] || "Article"}
-                />
-              ))}
-            </div>
-          )}
+          {/* Blog Grid - 3 Columns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post) => (
+              <BlogCard
+                key={post.slug}
+                id={post.slug}
+                title={post.title}
+                excerpt={post.description}
+                image={post.image}
+                date={post.date}
+                readTime={post.readTime}
+                category={post.tags[0] || "Article"}
+              />
+            ))}
+          </div>
         </div>
       </section>
     </Layout>

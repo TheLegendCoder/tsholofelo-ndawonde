@@ -1,13 +1,13 @@
 ---
-title: From Black Box to Black Belt — Understanding Messaging Patterns and Idempotency
-description: How a simple user ID generation problem led me to understand race conditions, delivery semantics, and the Outbox/Inbox patterns that power modern distributed systems.
+title: "From It Works to I Trust It: What Messaging, Concurrency, and Idempotency Taught Me About Modern Systems"
+description: "How a simple user ID generation problem led me to understand race conditions, delivery semantics, and the Outbox/Inbox patterns that power modern distributed systems."
 date: 2026-02-05
 author: Tsholofelo Ndawonde
 tags: [Messaging, Idempotency, Distributed Systems, Azure Service Bus, System Design]
-readTime: 18 min
+readTime: 6 min
 published: true
-featured: false
-image: https://images.unsplash.com/photo-1551737906-65f42a8b0e38?w=1200&h=630&fit=crop
+featured: true
+image: https://djfeucuujeenuvappydk.supabase.co/storage/v1/object/public/public-images/personal-website/Designer.jpeg
 imageHint: Complex distributed system architecture with interconnected nodes
 ---
 
