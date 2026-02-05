@@ -6,12 +6,18 @@ const nextConfig: NextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
   images: {
-  // Explicit domains (simple allow-list) plus remotePatterns (granular). Either works; keeping both for clarity.
-  domains: ['images.unsplash.com', 'placehold.co'],
+    // Explicit domains (simple allow-list) plus remotePatterns (granular). Either works; keeping both for clarity.
+    domains: ['images.unsplash.com', 'placehold.co'],
     remotePatterns: [
       { protocol: 'https', hostname: 'placehold.co', port: '', pathname: '/**' },
       { protocol: 'https', hostname: 'images.unsplash.com', port: '', pathname: '/**' },
     ],
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = [...(config.externals || []), 'fs', 'path', 'gray-matter'];
+    }
+    return config;
   },
 };
 

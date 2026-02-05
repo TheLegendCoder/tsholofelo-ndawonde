@@ -1,15 +1,14 @@
-"use client";
-
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BlogCard } from "@/components/blog/blogcard";
-import { blogPosts } from "@/components/data/content";
+import { getAllBlogPosts } from "@/lib/blog";
 import { StaggerContainer } from "@/components/ui/stagger";
 import { EmptyState } from "@/components/ui/empty-state";
 
-export function LatestPosts() {
-  const latestPosts = blogPosts.slice(0, 3);
+export async function LatestPosts() {
+  const allPosts = await getAllBlogPosts();
+  const latestPosts = allPosts.slice(0, 3);
 
   return (
     <section className="py-20">
@@ -40,7 +39,16 @@ export function LatestPosts() {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
             >
               {latestPosts.map((post) => (
-                <BlogCard key={post.id} {...post} />
+                <BlogCard
+                  key={post.slug}
+                  id={post.slug}
+                  title={post.title}
+                  excerpt={post.description}
+                  image={post.image}
+                  date={post.date}
+                  readTime={post.readTime}
+                  category={post.tags[0] || "Article"}
+                />
               ))}
             </StaggerContainer>
 
