@@ -1,11 +1,13 @@
 import { remark } from 'remark';
+import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 
 // Configure the markdown processor with syntax highlighting
-// Fixed pipeline: remark → remark-rehype → rehype-highlight → rehype-stringify
+// Fixed pipeline: remark → remark-gfm → remark-rehype → rehype-highlight → rehype-stringify
 const processor = remark()
+  .use(remarkGfm)
   .use(remarkRehype, { allowDangerousHtml: true })
   .use(rehypeHighlight, {
     detect: true,

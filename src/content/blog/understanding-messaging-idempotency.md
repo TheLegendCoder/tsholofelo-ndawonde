@@ -295,7 +295,7 @@ The message is processed **once and only once**.
 ### How to Choose in Practice
 
 | Scenario | Recommendation |
-| --- | --- |
+|----------|-----------------|
 | Non-critical data | At-most-once |
 | Business workflows | At-least-once + idempotency |
 | Financial correctness | At-least-once + Outbox + Inbox |
