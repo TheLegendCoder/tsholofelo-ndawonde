@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Github, Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { personalInfo, skills, projects } from "@/components/data/content";
+import { personalInfo, projects } from "@/components/data/content";
 import { StaggerContainer } from "@/components/ui/stagger";
 import { ProjectCard } from "@/components/projects/projectcards";
 import { useState, useEffect } from "react";
@@ -125,20 +125,11 @@ export function Hero() {
 					<div
 						className="mt-16 animate-fade-up [animation-delay:0.5s]"
 					>
-						<p className="text-sm text-muted-foreground mb-4">Technologies I work with</p>
 						<StaggerContainer
 							variant="fade"
 							delayChildren={600}
 							className="flex flex-wrap items-center justify-center gap-3"
 						>
-							{skills.map((skill) => (
-								<span
-									key={skill}
-									className="px-4 py-2 rounded-full bg-card shadow-soft text-sm font-medium text-foreground hover:shadow-hover hover:-translate-y-0.5 transition-all duration-200"
-								>
-									{skill}
-								</span>
-							))}
 						</StaggerContainer>
 					</div>
 				</div>
