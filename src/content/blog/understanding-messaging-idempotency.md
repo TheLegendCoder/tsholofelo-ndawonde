@@ -361,7 +361,17 @@ AI tools can dramatically improve productivity. In my case, they helped me quick
 
 The real lesson wasn't about Azure Service Bus or user ID generation—it was about **curiosity**.
 
-Questioning recommendations, unpacking unfamiliar terms, and understanding system behaviour transforms a working solution into lasting knowledge. In a world where software systems are becoming increasingly distributed and complex, fostering this habit is more important than ever.
+Using AI dramatically improved my productivity and helped me unblock a real-world problem. However, this experience reinforced an important lesson: AI can provide solutions, but understanding remains the responsibility of the engineer.
+
+Concepts like messaging patterns, idempotency, delivery guarantees, and concurrency are not just academic terms—they define how systems behave under load, failure, and scale. Without understanding them, it’s easy to ship something that works today but fails unpredictably tomorrow.
+
+What changed for me was not just the implementation, but my mindset. I now approach AI-generated solutions with curiosity rather than blind trust. When a term appears that I don’t understand, I treat it as a signal to dig deeper. That habit—questioning why something works—is what turns fixes into learning and tools into mastery.
+
+In modern software engineering, reliability does not come from writing perfect code. It comes from designing systems that assume failure, embrace concurrency, and handle repetition safely. Understanding these principles is what allows us to build systems we can confidently scale, evolve, and depend on.
+
+The solution worked.
+Understanding why it worked is what made it valuable.
+.
 
 **The goal isn't just to build systems that work. It's to build systems you understand.**
 
