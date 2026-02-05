@@ -11,6 +11,8 @@ import { StaggerContainer } from '@/components/ui/stagger';
 import { CelebrationButton } from '@/components/ui/celebration-button';
 import { useToast } from '@/hooks/use-toast';
 import { EmptyState } from '@/components/ui/empty-state';
+import { BreadcrumbWithSchema } from '@/components/ui/breadcrumb';
+import { generateBreadcrumbs } from '@/lib/seo/breadcrumbs';
 
 const projects = [ 
   {
@@ -59,6 +61,8 @@ export default function ProjectsPage() {
     }
   };
 
+  const breadcrumbs = generateBreadcrumbs('/projects');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5">
       {/* Hero Section */}
@@ -68,6 +72,10 @@ export default function ProjectsPage() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-secondary mb-4 animate-fade-in">
               My Projects
             </h1>
+            
+            {/* Breadcrumb Navigation */}
+            <BreadcrumbWithSchema items={breadcrumbs} className="mb-4" />
+            
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl animate-fade-in">
               A collection of my professional work and personal projects showcasing my skills in web development, design, and problem-solving.
             </p>

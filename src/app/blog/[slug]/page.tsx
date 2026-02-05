@@ -4,6 +4,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import "highlight.js/styles/atom-one-dark.css";
+import { generateSEOMetadata, getCanonicalUrl } from "@/lib/seo/metadata";
+import { generateBlogPostingSchema, generateJSONLD } from "@/lib/seo/structured-data";
+import { BreadcrumbWithSchema } from "@/components/ui/breadcrumb";
+import { generateBlogPostBreadcrumbs } from "@/lib/seo/breadcrumbs";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -29,25 +33,17 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
     };
   }
 
-  return {
+  return generateSEOMetadata({
     title: post.title,
     description: post.description,
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      type: "article",
-      publishedTime: post.date,
-      authors: [post.author],
-      images: [
-        {
-          url: post.image,
-          width: 1200,
-          height: 630,
-          alt: post.imageHint || post.title,
-        },
-      ],
-    },
-  };
+    image: post.image,
+    imageAlt: post.imageHint || post.title,
+    type: 'article',
+    publishedTime: post.date,
+    authors: [post.author],
+    tags: post.tags,
+    canonicalUrl: getCanonicalUrl(`/blog/${slug}`),
+  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -64,8 +60,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     day: "numeric",
   });
 
+  // Generate BlogPosting structured data
+  const blogPostingSchema = generateBlogPostingSchema({
+    title: post.title,
+    description: post.description,
+    url: getCanonicalUrl(`/blog/${slug}`),
+    image: post.image,
+    datePublished: post.date,
+    author: post.author,
+    keywords: post.tags,
+  });
+
+  // Generate breadcrumbs (simplified: Blog > Post Title)
+  const breadcrumbs = generateBlogPostBreadcrumbs(post.title);
+
   return (
     <Layout>
+      {/* BlogPosting Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: generateJSONLD(blogPostingSchema) }}
+      />
+
       <article className="py-12 sm:py-16 lg:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
           {/* Back Button */}
@@ -82,6 +98,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <h1 className="text-4xl sm:text-5xl font-display font-bold text-foreground mb-4">
               {post.title}
             </h1>
+
+            {/* Breadcrumb Navigation */}
+            <BreadcrumbWithSchema items={breadcrumbs} className="mb-4" />
 
             <p className="text-lg text-muted-foreground mb-6">
               {post.description}

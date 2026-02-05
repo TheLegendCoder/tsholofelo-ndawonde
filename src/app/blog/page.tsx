@@ -3,15 +3,19 @@ import { BlogCard } from "@/components/blog/blogcard";
 import { getAllBlogPosts } from "@/lib/blog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BookOpen } from "lucide-react";
+import { generateSEOMetadata, getCanonicalUrl } from "@/lib/seo/metadata";
+import { BreadcrumbWithSchema } from "@/components/ui/breadcrumb";
+import { generateBreadcrumbs } from "@/lib/seo/breadcrumbs";
 
-export const metadata = {
+export const metadata = generateSEOMetadata({
   title: "Blog",
-  description:
-    "Thoughts, tutorials, and insights about software development, React, TypeScript, and web technologies.",
-};
+  description: "Thoughts, tutorials, and insights about software development, React, TypeScript, and web technologies. Learn from real-world projects and experiments.",
+  canonicalUrl: getCanonicalUrl('/blog'),
+});
 
 async function BlogPage() {
   const posts = await getAllBlogPosts();
+  const breadcrumbs = generateBreadcrumbs('/blog');
 
   if (posts.length === 0) {
     return (
@@ -22,6 +26,12 @@ async function BlogPage() {
               <h1 className="text-4xl sm:text-5xl font-display font-bold text-foreground mb-4">
                 Blog
               </h1>
+              
+              {/* Breadcrumb Navigation */}
+              <div className="flex justify-center mb-4">
+                <BreadcrumbWithSchema items={breadcrumbs} />
+              </div>
+              
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Thoughts, tutorials, and insights about software development.
               </p>
@@ -43,10 +53,16 @@ async function BlogPage() {
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl font-display font-bold text-foreground mb-4">
               Blog
             </h1>
+            
+            {/* Breadcrumb Navigation */}
+            <div className="flex justify-center mb-4">
+              <BreadcrumbWithSchema items={breadcrumbs} />
+            </div>
+            
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Thoughts, tutorials, and insights about software development, React, and modern web
               technologies.
