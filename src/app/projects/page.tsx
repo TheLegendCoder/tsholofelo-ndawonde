@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github, Code2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { StaggerContainer } from '@/components/ui/stagger';
 import { CelebrationButton } from '@/components/ui/celebration-button';
 import { useToast } from '@/hooks/use-toast';
+import { EmptyState } from '@/components/ui/empty-state';
 
 const projects = [ 
   {
@@ -142,22 +143,12 @@ export default function ProjectsPage() {
       <section className="py-12 lg:py-16">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           {filteredProjects.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 lg:py-16 space-y-4 animate-fade-in">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-2xl font-semibold text-foreground">Nothing here yet</h3>
-              <p className="text-muted-foreground text-lg max-w-md mx-auto">
-                Check out my {showPersonal ? 'professional' : 'personal'} work instead! More exciting projects coming soon.
-              </p>
-              <div className="pt-4">
-                <Button 
-                  onClick={() => handleFilterChange(!showPersonal)}
-                  variant="outline"
-                  size="lg"
-                >
-                  View {showPersonal ? 'Professional' : 'Personal'} Projects
-                </Button>
-              </div>
-            </div>
+            <EmptyState
+              icon={<Code2 className="h-12 w-12 text-primary" />}
+              title="Projects on the way"
+              description={`More ${showPersonal ? 'personal' : 'professional'} projects coming soon. I'm continuously working on new and exciting work to showcase here.`}
+              actionText="Check back soon"
+            />
           ) : (
             <StaggerContainer
               variant="slide-up"

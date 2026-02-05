@@ -1,6 +1,8 @@
+"use client";
+
 import { Layout } from "@/components/layout/layout";
-import { BlogCard } from "@/components/blog/blogcard";
-import { blogPosts } from "@/components/data/content";
+import { EmptyState } from "@/components/ui/empty-state";
+import { BookOpen } from "lucide-react";
 
 const Blog = () => {
   return (
@@ -13,11 +15,12 @@ const Blog = () => {
               Thoughts, tutorials, and insights about software development.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
-              <BlogCard key={post.id} {...post} />
-            ))}
-          </div>
+          <EmptyState
+            icon={<BookOpen className="h-12 w-12 text-primary" />}
+            title="Blog posts coming soon"
+            description="I'm working on some insightful articles about web development, design patterns, and best practices. Check back soon for in-depth tutorials and technical insights."
+            actionText="Check back soon"
+          />
         </div>
       </section>
     </Layout>
