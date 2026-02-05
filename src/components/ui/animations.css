@@ -1,0 +1,194 @@
+/* Emotional Design Animation Utilities */
+
+/* GPU acceleration helpers */
+.will-animate {
+  will-change: transform, opacity;
+}
+
+.will-animate-gpu {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Ripple effect animation */
+@keyframes ripple {
+  from {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+  }
+  to {
+    width: 400px;
+    height: 400px;
+    opacity: 0;
+  }
+}
+
+.ripple-element {
+  animation: ripple 0.6s ease-out;
+}
+
+/* Stagger animations for lists and grids */
+.animate-stagger-children > * {
+  animation: cascade-in 0.5s ease-out backwards;
+}
+
+.animate-stagger-children > *:nth-child(1) {
+  animation-delay: 0s;
+}
+.animate-stagger-children > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.animate-stagger-children > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.animate-stagger-children > *:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.animate-stagger-children > *:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.animate-stagger-children > *:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.animate-stagger-children > *:nth-child(n+7) {
+  animation-delay: 0.6s;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Glow effect utilities */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(0, 200, 200, 0.3);
+}
+
+.glow-pulse {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Shimmer loader background */
+.shimmer-background {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted)) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Smooth page transitions - disable for browsers that don't support it well */
+@supports (animation-timeline: view()) {
+  .fade-on-scroll {
+    opacity: 0;
+    animation: fade-in linear;
+    animation-timeline: view();
+  }
+}
+
+/* Interactive element focus states */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Smooth color transitions for theme changes */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Prevent layout shift on scroll */
+html {
+  overflow-y: scroll;
+}
+
+/* Smooth hover transitions for images */
+img {
+  transition: transform 0.3s ease-out;
+}
+
+/* Text selection color with brand colors */
+::selection {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+/* Scrollbar styling for modern browsers */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-color: hsl(var(--primary)) hsl(var(--muted));
+  scrollbar-width: thin;
+}
+
+/* Enhance link interactions */
+a {
+  position: relative;
+  text-decoration: none;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: hsl(var(--primary));
+  transition: width 0.3s ease-out;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Prevent CLS on interactive elements */
+button,
+[role="button"] {
+  line-height: 1.2;
+  min-height: 44px; /* Mobile accessibility */
+  min-width: 44px;
+}

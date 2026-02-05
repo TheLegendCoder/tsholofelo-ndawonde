@@ -1,0 +1,31 @@
+.container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.ripple {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(255 255 255 / 0.3);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  from {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+  }
+  to {
+    width: 400px;
+    height: 400px;
+    opacity: 0;
+  }
+}

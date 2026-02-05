@@ -1,214 +1,160 @@
-import { notFound } from 'next/navigation';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, User, Share2, BookOpen } from 'lucide-react';
-import { Metadata } from 'next';
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import { markdownToHtml } from '@/lib/markdown';
+import { getBlogPost, getAllBlogPosts } from "@/lib/blog";
+import { Layout } from "@/components/layout/layout";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import "highlight.js/styles/atom-one-dark.css";
+import { generateSEOMetadata, getCanonicalUrl } from "@/lib/seo/metadata";
+import { generateBlogPostingSchema, generateJSONLD } from "@/lib/seo/structured-data";
+import { BreadcrumbWithSchema } from "@/components/ui/breadcrumb";
+import { generateBlogPostBreadcrumbs } from "@/lib/seo/breadcrumbs";
 
-interface BlogPost {
-  title: string;
-  description: string;
-  date: string;
-  author: string;
-  tags: string[];
-  readTime: string;
-  published: boolean;
-  featured?: boolean;
-  image?: string;
-  imageHint?: string;
-  slug: string;
-  content: string;
+interface BlogPostPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
+export async function generateStaticParams() {
+  const posts = await getAllBlogPosts();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
 }
 
-// Get blog post by slug
-async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  try {
-    const filePath = path.join(process.cwd(), 'src', 'content', 'blog', `${slug}.md`);
-    
-    if (!fs.existsSync(filePath)) {
-      return null;
-    }
-
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const { data, content } = matter(fileContents);
-
-    return {
-      title: data.title,
-      description: data.description,
-      date: data.date,
-      author: data.author,
-      tags: data.tags || [],
-      readTime: data.readTime,
-      published: data.published ?? true,
-      featured: data.featured,
-      image: data.image,
-      imageHint: data.imageHint,
-      slug: data.slug || slug,
-      content,
-    };
-  } catch (error) {
-    console.error('Error reading blog post:', error);
-    return null;
-  }
-}
-
-// Generate metadata for the page
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = await getBlogPost(slug);
 
   if (!post) {
     return {
-      title: 'Blog Post Not Found',
+      title: "Post Not Found",
+      description: "The blog post you're looking for doesn't exist.",
     };
   }
 
-  return {
-    title: `${post.title} | Tsholofelo Ndawonde`,
+  return generateSEOMetadata({
+    title: post.title,
     description: post.description,
-    keywords: post.tags.join(', '),
-    authors: [{ name: post.author }],
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      type: 'article',
-      publishedTime: post.date,
-      authors: [post.author],
-      tags: post.tags,
-      images: post.image ? [{ url: post.image }] : undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.description,
-      images: post.image ? [post.image] : undefined,
-    },
-  };
+    image: post.image,
+    imageAlt: post.imageHint || post.title,
+    type: 'article',
+    publishedTime: post.date,
+    authors: [post.author],
+    tags: post.tags,
+    canonicalUrl: getCanonicalUrl(`/blog/${slug}`),
+  });
 }
 
-export default async function BlogPostPage({ params }: PageProps) {
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = await getBlogPost(slug);
 
-  if (!post || !post.published) {
+  if (!post) {
     notFound();
   }
 
-  const htmlContent = await markdownToHtml(post.content);
-  const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const formattedDate = new Date(post.date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
+  // Generate BlogPosting structured data
+  const blogPostingSchema = generateBlogPostingSchema({
+    title: post.title,
+    description: post.description,
+    url: getCanonicalUrl(`/blog/${slug}`),
+    image: post.image,
+    datePublished: post.date,
+    author: post.author,
+    keywords: post.tags,
+  });
+
+  // Generate breadcrumbs (simplified: Blog > Post Title)
+  const breadcrumbs = generateBlogPostBreadcrumbs(post.title);
+
   return (
-    <article className="w-full overflow-x-hidden">
-      {/* Header Section */}
-      <section className="py-16 sm:py-20 md:py-24 bg-background border-b border-border/40">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            {/* Back button */}
-            <div className="mb-8">
-              <Button asChild variant="ghost" size="sm" className="gap-2">
-                <Link href="/blog">
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to Blog
-                </Link>
-              </Button>
-            </div>
+    <Layout>
+      {/* BlogPosting Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: generateJSONLD(blogPostingSchema) }}
+      />
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {post.tags.map(tag => (
-                <Badge key={tag} variant="secondary" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+      <article className="py-12 sm:py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+          {/* Back Button */}
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-8"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Blog
+          </Link>
 
-            {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-foreground">
+          {/* Header */}
+          <header className="mb-8 sm:mb-12">
+            <h1 className="text-4xl sm:text-5xl font-display font-bold text-foreground mb-4">
               {post.title}
             </h1>
 
-            {/* Description */}
-            <p className="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed">
+            {/* Breadcrumb Navigation */}
+            <BreadcrumbWithSchema items={breadcrumbs} className="mb-4" />
+
+            <p className="text-lg text-muted-foreground mb-6">
               {post.description}
             </p>
 
-            {/* Meta information */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span>{post.author}</span>
+            {/* Metadata */}
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-t border-border pt-6">
+              <div>
+                <span className="font-semibold text-foreground">{post.author}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>{formattedDate}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>{post.readTime}</span>
-              </div>
+              <span className="hidden sm:inline">•</span>
+              <time dateTime={post.date}>{formattedDate}</time>
+              <span className="hidden sm:inline">•</span>
+              <span>{post.readTime}</span>
             </div>
-          </div>
-        </div>
-      </section>
+          </header>
 
-      {/* Content Section */}
-      <section className="py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <Card className="p-8 md:p-12 bg-card">
-              <div 
-                className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-code:text-foreground prose-pre:bg-transparent prose-a:text-primary hover:prose-a:text-primary/80 prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: htmlContent }}
+          {/* Featured Image */}
+          {post.image && (
+            <div className="mb-8 sm:mb-12 rounded-lg overflow-hidden bg-muted">
+              <img
+                src={post.image}
+                alt={post.imageHint || post.title}
+                className="w-full h-auto object-cover aspect-video"
               />
-            </Card>
-
-            {/* Share section */}
-            <div className="mt-12 p-6 bg-card/50 rounded-lg border border-border/40">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Share this article</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Help others discover this content
-                  </p>
-                </div>
-                <div className="flex gap-3">
-                  <Button size="sm" variant="outline" className="gap-2">
-                    <Share2 className="h-4 w-4" />
-                    Share
-                  </Button>
-                  <Button size="sm" variant="outline" className="gap-2">
-                    <BookOpen className="h-4 w-4" />
-                    Save
-                  </Button>
-                </div>
-              </div>
             </div>
+          )}
 
-            {/* Navigation */}
-            <div className="mt-12 flex justify-center">
-              <Button asChild size="lg" className="gap-2">
-                <Link href="/blog">
-                  <ArrowLeft className="h-4 w-4" />
-                  More Articles
-                </Link>
-              </Button>
-            </div>
+          {/* Content */}
+          <div className="prose prose-sm sm:prose lg:prose-lg dark:prose-invert max-w-none prose-headings:font-display prose-headings:font-bold prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-a:text-primary hover:prose-a:text-primary/80 prose-a:underline prose-code:bg-muted prose-code:text-foreground prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:p-4 prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground prose-blockquote:pl-6 prose-hr:border-border prose-strong:text-foreground prose-em:text-muted-foreground">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: post.content,
+              }}
+            />
           </div>
+
+          {/* Tags */}
+          {post.tags && post.tags.length > 0 && (
+            <footer className="mt-12 sm:mt-16 pt-8 border-t border-border">
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-block px-3 py-1 bg-muted text-muted-foreground text-sm rounded-full"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </footer>
+          )}
         </div>
-      </section>
-    </article>
+      </article>
+    </Layout>
   );
 }

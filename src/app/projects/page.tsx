@@ -5,49 +5,25 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ExternalLink, Github } from 'lucide-react';
-import { useState } from 'react';
+import { ExternalLink, Github, Code2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { StaggerContainer } from '@/components/ui/stagger';
+import { CelebrationButton } from '@/components/ui/celebration-button';
+import { useToast } from '@/hooks/use-toast';
+import { EmptyState } from '@/components/ui/empty-state';
+import { BreadcrumbWithSchema } from '@/components/ui/breadcrumb';
+import { generateBreadcrumbs } from '@/lib/seo/breadcrumbs';
 
 const projects = [ 
   {
-    title: "E-commerce Platform",
-    description: "A full-featured e-commerce site with product listings, a shopping cart, and a secure checkout process. Built with Next.js and Stripe integration.",
-    image: "https://placehold.co/600x400.png",
-    tags: ["Next.js", "React", "Stripe", "TailwindCSS"],
-    liveUrl: "#",
-    githubUrl: "#",
-    imageHint: "online store",
-    type: "professional"
-  },
-  {
-    title: "Task Management App",
-    description: "A collaborative task management tool that helps teams organize their work, track progress, and meet deadlines. Features real-time updates.",
-    image: "https://placehold.co/600x400.png",
-    tags: ["React", "Firebase", "Node.js", "Express"],
-    liveUrl: "#",
-    githubUrl: "#",
-    imageHint: "project management",
-    type: "professional"
-  },
-  {
     title: "Portfolio Website",
-    description: "My personal portfolio site (the one you're on right now!) to showcase my skills and projects. Designed in Figma and built with Next.js.",
+    description: "My personal portfolio site to showcase my skills and projects. Designed with attention to detail and built with Next.js, TypeScript, and Tailwind CSS for a modern, responsive experience.",
     image: "https://placehold.co/600x400.png",
-    tags: ["Next.js", "Figma", "TypeScript"],
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
     liveUrl: "#",
     githubUrl: "#",
     imageHint: "personal website",
-    type: "pet"
-  },
-  {
-    title: "Weather App",
-    description: "A simple and elegant weather application that provides real-time weather data for any location, using a third-party weather API.",
-    image: "https://placehold.co/600x400.png",
-    tags: ["React", "API", "CSS"],
-    liveUrl: "#",
-    githubUrl: "#",
-    imageHint: "weather forecast",
-    type: "pet"
+    type: "professional"
   }
 ] as const;
 
@@ -59,62 +35,106 @@ const FILTERS = [
 type ProjectType = 'professional' | 'pet';
 
 export default function ProjectsPage() {
-  const [filter, setFilter] = useState<ProjectType>('professional');
+  const [showPersonal, setShowPersonal] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const { toast } = useToast();
   
-  const filteredProjects = projects.filter(project => 
-    filter === 'professional' ? project.type === 'professional' : project.type === 'pet'
+  const filteredProjects = projects.filter((project: typeof projects[number] | { type: 'pet' | 'professional' }) => 
+    showPersonal ? project.type === 'pet' : project.type === 'professional'
   );
 
+  const handleFilterChange = (value: boolean) => {
+    if (value !== showPersonal) {
+      setIsTransitioning(true);
+      
+      // Show loading toast
+      toast({
+        title: value ? "Switching to personal projects..." : "Switching to professional work...",
+        duration: 1500,
+      });
+
+      // Delay state change for smooth animation
+      setTimeout(() => {
+        setShowPersonal(value);
+        setIsTransitioning(false);
+      }, 300);
+    }
+  };
+
+  const breadcrumbs = generateBreadcrumbs('/projects');
+
   return (
-    <div className="w-full overflow-x-hidden">
-      {/* Header Section */}
-      <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold font-headline mb-4 sm:mb-6">
-              Projects
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5">
+      {/* Hero Section */}
+      <section className="py-12 sm:py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+          <div className="flex flex-col items-center text-center mb-12 lg:mb-16">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-secondary mb-4 animate-fade-in">
+              My Projects
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 lg:mb-12">
-              A showcase of professional work and personal projects that demonstrate my skills and passion for technology.
-            </p>
             
-            {/* Filter Buttons */}
-            <div className="flex justify-center">
-              <div className="flex bg-white/10 border border-white/20 rounded-full p-1 sm:p-2 gap-1 sm:gap-2 shadow-inner" role="group" aria-label="Project filter options">
-                {FILTERS.map((filterOption) => {
-                  const isSelected = filter === filterOption.value;
-                  return (
-                    <button
-                      key={filterOption.value}
-                      type="button"
-                      className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200 ${
-                        isSelected
-                          ? 'bg-white/20 shadow text-white' 
-                          : 'text-white/70 hover:text-white hover:bg-white/10'
-                      }`}
-                      onClick={() => setFilter(filterOption.value as ProjectType)}
-                      aria-label={`Show ${filterOption.label.toLowerCase()} projects`}
-                      data-active={isSelected}
-                    >
-                      {filterOption.label}
-                    </button>
-                  );
-                })}
-              </div>
+            {/* Breadcrumb Navigation */}
+            <BreadcrumbWithSchema items={breadcrumbs} className="mb-4" />
+            
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl animate-fade-in">
+              A collection of my professional work and personal projects showcasing my skills in web development, design, and problem-solving.
+            </p>
+          </div>
+
+          {/* Filter Buttons */}
+          <div className="flex justify-center mb-12 lg:mb-16">
+            <div className="inline-flex bg-card rounded-full p-1 gap-2 shadow-lg">
+              <CelebrationButton
+                type="button"
+                onClick={() => handleFilterChange(false)}
+                celebrateOnClick={true}
+                celebrationIntensity="low"
+                className={`px-6 sm:px-8 lg:px-10 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
+                  !showPersonal
+                    ? 'bg-background text-primary'
+                    : 'text-white/80 hover:text-white'
+                }`}
+                aria-label="Show professional projects"
+              >
+                Professional
+              </CelebrationButton>
+              <CelebrationButton
+                type="button"
+                onClick={() => handleFilterChange(true)}
+                celebrateOnClick={true}
+                celebrationIntensity="low"
+                className={`px-6 sm:px-8 lg:px-10 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
+                  showPersonal
+                    ? 'bg-background text-primary'
+                    : 'text-white/80 hover:text-white'
+                }`}
+                aria-label="Show personal projects"
+              >
+                Personal
+              </CelebrationButton>
             </div>
           </div>
         </div>
       </section>
 
       {/* Projects Grid */}
-      <section className="py-16 md:py-20 lg:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-12 lg:py-16">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           {filteredProjects.length === 0 ? (
-            <div className="text-center text-muted-foreground text-lg sm:text-xl py-12 lg:py-16">
-              No projects found for this category.
-            </div>
+            <EmptyState
+              icon={<Code2 className="h-12 w-12 text-primary" />}
+              title="Projects on the way"
+              description={`More ${showPersonal ? 'personal' : 'professional'} projects coming soon. I'm continuously working on new and exciting work to showcase here.`}
+              actionText="Check back soon"
+            />
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-7xl mx-auto">
+            <StaggerContainer
+              variant="slide-up"
+              delayChildren={0}
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 transition-opacity duration-300 ${
+                isTransitioning ? 'opacity-0' : 'opacity-100'
+              }`}
+            >
               {filteredProjects.map((project) => (
                 <article key={project.title}>
                   <Card className="flex flex-col overflow-hidden h-full transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/20 bg-card group">
@@ -166,7 +186,7 @@ export default function ProjectsPage() {
                   </Card>
                 </article>
               ))}
-            </div>
+            </StaggerContainer>
           )}
         </div>
       </section>

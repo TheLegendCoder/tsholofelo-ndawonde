@@ -1,117 +1,90 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { Menu, X, Code } from 'lucide-react';
-import { useState, useEffect, useTransition } from 'react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/tutorials', label: 'Tutorials' },
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  { name: "Projects", path: "/projects" },
+  { name: "Blog", path: "/blog" },
+  { name: "Tutorials", path: "/tutorials" },
 ];
 
-export function Header() {
+export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
-  const router = useRouter();
-  const isMobile = useIsMobile();
-
-  // Close mobile menu when screen size changes to desktop
-  useEffect(() => {
-    if (!isMobile && isOpen) {
-      setIsOpen(false);
-    }
-  }, [isMobile, isOpen]);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleNavigation = (href: string) => {
-    if (href !== pathname) {
-      startTransition(() => {
-        router.push(href);
-      });
-    }
-  };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center px-4 sm:px-6 lg:px-8">
-        <div className="mr-4 flex items-center min-w-0">
-          <Link href="/" className="flex items-center space-x-2 min-w-0">
-            <Code className="h-6 w-6 text-primary flex-shrink-0" />
-            <span className="font-bold text-base sm:text-lg truncate">
-              <span className="hidden sm:inline">Tsholofelo Ndawonde</span>
-              <span className="sm:hidden">T. Ndawonde</span>
-            </span>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+      <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link 
+            href="/" 
+            className="text-xl font-display font-semibold text-foreground hover:text-primary transition-colors"
+          >
+            Tsholofelo<span className="text-primary">.</span>
           </Link>
-        </div>
-        
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex flex-1 items-center justify-center space-x-6 text-sm font-medium">
-          {navLinks.map((link) => (
-            <button
-              key={link.href}
-              onClick={() => handleNavigation(link.href)}
-              className={cn(
-                'transition-colors hover:text-primary whitespace-nowrap flex items-center gap-2',
-                pathname === link.href ? 'text-primary' : 'text-foreground/60'
-              )}
-              disabled={isPending}
-            >
-              {link.label}
-              {isPending && <LoadingSpinner size="sm" />}
-            </button>
-          ))}
-        </nav>
-        
-        {/* Mobile Menu Button */}
-        <div className="flex flex-1 items-center justify-end md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleMenu} className="ml-auto">
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            <span className="sr-only">Toggle Menu</span>
-          </Button>
-        </div>
-      </div>
-      
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur">
-          <div className="container mx-auto px-4 py-3 space-y-1">
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => {
-                  setIsOpen(false);
-                  handleNavigation(link.href);
-                }}
+              <Link
+                key={link.path}
+                href={link.path}
                 className={cn(
-                  'w-full text-left rounded-md px-3 py-2 text-base font-medium transition-colors hover:text-primary hover:bg-accent/10 flex items-center gap-2',
-                  pathname === link.href ? 'text-primary bg-accent/20' : 'text-foreground/80'
+                  "px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200",
+                  pathname === link.path
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 )}
-                disabled={isPending}
               >
-                {link.label}
-                {isPending && <LoadingSpinner size="sm" />}
-              </button>
+                {link.name}
+              </Link>
             ))}
           </div>
+
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
-      )}
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="md:hidden py-4 border-t border-border animate-fade-in">
+            <div className="flex flex-col gap-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  href={link.path}
+                  onClick={() => setIsOpen(false)}
+                  className={cn(
+                    "px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200",
+                    pathname === link.path
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </nav>
     </header>
   );
 }

@@ -1,20 +1,39 @@
+'use client'
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import styles from "./card.module.css"
 
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-))
+  React.HTMLAttributes<HTMLDivElement> & {
+    animationDelay?: string
+    interactive?: boolean
+    glow?: boolean
+  }
+>(({ className, animationDelay, interactive = false, glow = false, ...props }, ref) => {
+  const cardRef = React.useRef<HTMLDivElement>(null)
+
+  React.useLayoutEffect(() => {
+    if (cardRef.current && animationDelay) {
+      cardRef.current.style.animationDelay = animationDelay
+    }
+  }, [animationDelay])
+
+  return (
+    <div
+      ref={cardRef}
+      className={cn(
+        styles.card,
+        interactive && styles.cardInteractive,
+        glow && styles.cardGlow,
+        className
+      )}
+      {...props}
+    />
+  )
+})
 Card.displayName = "Card"
 
 const CardHeader = React.forwardRef<
@@ -23,7 +42,7 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    className={cn(styles.cardHeader, className)}
     {...props}
   />
 ))
@@ -35,10 +54,7 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
+    className={cn(styles.cardTitle, className)}
     {...props}
   />
 ))
@@ -50,7 +66,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn(styles.cardDescription, className)}
     {...props}
   />
 ))
@@ -60,7 +76,7 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  <div ref={ref} className={cn(styles.cardContent, className)} {...props} />
 ))
 CardContent.displayName = "CardContent"
 
@@ -70,7 +86,7 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
+    className={cn(styles.cardFooter, className)}
     {...props}
   />
 ))

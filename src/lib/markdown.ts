@@ -1,13 +1,14 @@
 import { remark } from 'remark';
-import remarkHtml from 'remark-html';
+import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 
 // Configure the markdown processor with syntax highlighting
+// Fixed pipeline: remark → remark-gfm → remark-rehype → rehype-highlight → rehype-stringify
 const processor = remark()
-  .use(remarkHtml, { sanitize: false })
-  .use(remarkRehype)
+  .use(remarkGfm)
+  .use(remarkRehype, { allowDangerousHtml: true })
   .use(rehypeHighlight, {
     detect: true,
     ignoreMissing: true,
@@ -18,7 +19,7 @@ const processor = remark()
       'typescript': ['ts']
     }
   })
-  .use(rehypeStringify);
+  .use(rehypeStringify, { allowDangerousHtml: true });
 
 export async function markdownToHtml(markdown: string): Promise<string> {
   const result = await processor.process(markdown);

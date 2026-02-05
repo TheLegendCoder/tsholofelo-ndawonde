@@ -1,35 +1,84 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
+
+import { ReactNode } from "react";
+import "./globals.css";
+import { Navbar } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toaster";
-import { NavigationProgress } from '@/components/ui/navigation-progress';
+import { generateSEOMetadata, getSiteUrl } from "@/lib/seo/metadata";
+import { 
+  generateOrganizationSchema, 
+  generateWebsiteSchema, 
+  generatePersonSchema,
+  generateJSONLD 
+} from "@/lib/seo/structured-data";
+import { personalInfo } from "@/components/data/content";
 
-export const metadata: Metadata = {
-  title: 'Tsholofelo Ndawonde | Portfolio',
-  description: 'Portfolio of Tsholofelo Ndawonde, a full-stack developer and designer.',
-};
+interface LayoutProps {
+  children: ReactNode;
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const metadata = generateSEOMetadata({
+  title: personalInfo.name,
+  description: personalInfo.bio,
+  canonicalUrl: getSiteUrl(),
+});
+
+export default function Layout({ children }: LayoutProps) {
+  const siteUrl = getSiteUrl();
+  
+  // Generate structured data schemas
+  const organizationSchema = generateOrganizationSchema({
+    name: personalInfo.name,
+    description: personalInfo.bio,
+    url: siteUrl,
+    email: personalInfo.email || undefined,
+    socialLinks: personalInfo.socialLinks,
+  });
+
+  const websiteSchema = generateWebsiteSchema({
+    name: personalInfo.name,
+    url: siteUrl,
+    description: personalInfo.bio,
+  });
+
+  const personSchema = generatePersonSchema({
+    name: personalInfo.name,
+    jobTitle: personalInfo.title,
+    description: personalInfo.bio,
+    url: siteUrl,
+    email: personalInfo.email || undefined,
+    socialLinks: personalInfo.socialLinks,
+  });
+
   return (
-    <html lang="en" className="dark">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-      </head>
-      <body className="font-body antialiased bg-background text-foreground min-h-screen flex flex-col overflow-x-hidden">
-        <NavigationProgress />
-        <Header />
-        <main className="flex-grow w-full">{children}</main>
-        <Footer />
-        <Toaster />
+    <html lang="en">
+      <body>
+        {/* Structured Data - Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: generateJSONLD(organizationSchema) }}
+        />
+        
+        {/* Structured Data - Website Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: generateJSONLD(websiteSchema) }}
+        />
+        
+        {/* Structured Data - Person Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: generateJSONLD(personSchema) }}
+        />
+
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-1 pt-16">
+            {children}
+          </main>
+          <Footer />
+          <Toaster />
+        </div>
       </body>
     </html>
   );
