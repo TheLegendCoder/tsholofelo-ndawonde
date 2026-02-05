@@ -83,8 +83,17 @@ export function Hero() {
 								<ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
 							</Link>
 						</Button>
-						<Button asChild variant="outline" size="lg">
-							<Link href="/contact">Get in Touch</Link>
+						<Button
+							variant="outline"
+							size="lg"
+							onClick={() => {
+								const footer = document.querySelector('footer');
+								if (footer) {
+									footer.scrollIntoView({ behavior: 'smooth' });
+								}
+							}}
+						>
+							Contact Me
 						</Button>
 					</div>
 
