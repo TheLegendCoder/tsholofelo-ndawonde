@@ -29,7 +29,7 @@ export const projects = [
     tags: ["React", "Node.js", "Stripe", "PostgreSQL"],
     liveUrl: "https://example.com",
     githubUrl: "https://github.com/example",
-    featured: true,
+    featured: false,
   },
   {
     id: "2",
@@ -39,7 +39,7 @@ export const projects = [
     tags: ["Next.js", "TypeScript", "Supabase"],
     liveUrl: "https://example.com",
     githubUrl: "https://github.com/example",
-    featured: true,
+    featured: false,
   },
   {
     id: "3",
@@ -48,8 +48,8 @@ export const projects = [
     image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&h=600&fit=crop",
     tags: ["React", "D3.js", "Weather API"],
     liveUrl: "https://example.com",
-    githubUrl: "https://github.com/example",
-    featured: true,
+    githubUrl: "https://example.com",
+    featured: false,
   },
   {
     id: "4",
@@ -121,7 +121,7 @@ The key is to start simple and add complexity only when needed.
     date: "2024-01-15",
     readTime: "8 min read",
     category: "React",
-    featured: true,
+    featured: false,
   },
   {
     id: "2",
@@ -173,7 +173,7 @@ Remember: Code is read far more often than it's written.
     date: "2024-01-08",
     readTime: "6 min read",
     category: "Best Practices",
-    featured: true,
+    featured: false,
   },
   {
     id: "3",
