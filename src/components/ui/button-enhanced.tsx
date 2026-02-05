@@ -1,5 +1,6 @@
 import * as React from "react"
 import { Button } from "./button"
+import { RippleContainer } from "./ripple"
 import type { ButtonProps } from "./button"
 
 interface EnhancedButtonProps extends ButtonProps {
@@ -43,20 +44,7 @@ const EnhancedButton = React.forwardRef<
       {...props}
     >
       {/* Ripple effects */}
-      {showRipple &&
-        ripples.map((ripple) => (
-          <span
-            key={ripple.id}
-            className="absolute animate-ripple rounded-full bg-white/30 pointer-events-none"
-            style={{
-              left: `${ripple.x}px`,
-              top: `${ripple.y}px`,
-              width: "10px",
-              height: "10px",
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-        ))}
+      <RippleContainer ripples={ripples} showRipple={showRipple} />
 
       {/* Pulse overlay on hover */}
       {pulseOnHover && (
@@ -64,7 +52,7 @@ const EnhancedButton = React.forwardRef<
       )}
 
       {/* Content */}
-      <span className="relative z-10" style={{} as React.CSSProperties}>{props.children}</span>
+      <span className="relative z-10">{props.children}</span>
     </Button>
   )
 })

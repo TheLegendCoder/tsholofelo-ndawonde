@@ -1,0 +1,16 @@
+/* Stagger Container Styles */
+
+.staggerContainer {
+  --stagger-children: 0;
+  --delay-children: 0ms;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

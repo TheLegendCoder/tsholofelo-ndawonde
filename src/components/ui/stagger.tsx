@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import styles from "./stagger.module.css"
 
 interface StaggerContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   staggerChildren?: boolean
@@ -22,19 +23,23 @@ const StaggerContainer = React.forwardRef<
     },
     ref
   ) => {
+    const containerRef = React.useRef<HTMLDivElement>(null)
+
+    React.useLayoutEffect(() => {
+      if (containerRef.current) {
+        containerRef.current.style.setProperty("--stagger-children", staggerChildren ? "1" : "0")
+        containerRef.current.style.setProperty("--delay-children", `${delayChildren}ms`)
+      }
+    }, [staggerChildren, delayChildren])
+
     return (
       <div
-        ref={ref}
+        ref={containerRef}
         className={cn(
-          "animate-fade-in",
+          styles.staggerContainer,
           className
         )}
         {...props}
-        style={{
-          ...props.style,
-          "--stagger-children": staggerChildren ? "1" : "0",
-          "--delay-children": `${delayChildren}ms`,
-        } as React.CSSProperties & { "--stagger-children": string; "--delay-children": string }}
       >
         {React.Children.map(children, (child, index) => {
           if (!React.isValidElement(child)) return child

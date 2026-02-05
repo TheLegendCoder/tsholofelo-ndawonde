@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import styles from './loading-spinner.module.css';
 
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg';
@@ -61,9 +62,9 @@ export function LoadingSpinner({ size = 'md', className, variant = 'default' }: 
   if (variant === 'bounce') {
     return (
       <div className={cn('flex items-center gap-1.5', className)} role="status" aria-label="Loading">
-        <span className={cn('rounded-full bg-primary animate-bounce', sizeClasses[size])} style={{ animationDelay: '0ms' }} />
-        <span className={cn('rounded-full bg-accent animate-bounce', sizeClasses[size])} style={{ animationDelay: '150ms' }} />
-        <span className={cn('rounded-full bg-primary animate-bounce', sizeClasses[size])} style={{ animationDelay: '300ms' }} />
+        <span className={cn('rounded-full bg-primary animate-bounce', sizeClasses[size], styles.bounceDot0)} />
+        <span className={cn('rounded-full bg-accent animate-bounce', sizeClasses[size], styles.bounceDot150ms)} />
+        <span className={cn('rounded-full bg-primary animate-bounce', sizeClasses[size], styles.bounceDot300ms)} />
         <span className="sr-only">Loading...</span>
       </div>
     );
@@ -72,9 +73,9 @@ export function LoadingSpinner({ size = 'md', className, variant = 'default' }: 
   if (variant === 'dots') {
     return (
       <div className={cn('flex items-center gap-1', className)} role="status" aria-label="Loading">
-        <div className={cn('rounded-full bg-primary animate-bounce', 'h-2 w-2')} style={{ animationDelay: '0s' }} />
-        <div className={cn('rounded-full bg-accent animate-bounce', 'h-2 w-2')} style={{ animationDelay: '0.15s' }} />
-        <div className={cn('rounded-full bg-primary animate-bounce', 'h-2 w-2')} style={{ animationDelay: '0.3s' }} />
+        <div className={cn('rounded-full bg-primary animate-bounce', 'h-2 w-2', styles.dot0s)} />
+        <div className={cn('rounded-full bg-accent animate-bounce', 'h-2 w-2', styles.dot015s)} />
+        <div className={cn('rounded-full bg-primary animate-bounce', 'h-2 w-2', styles.dot03s)} />
         <span className="sr-only">Loading...</span>
       </div>
     );
