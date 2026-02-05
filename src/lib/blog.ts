@@ -22,7 +22,11 @@ const postsDirectory = path.join(process.cwd(), 'src/content/blog');
 
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.md`);
+    // Check for both .mdx and .md files
+    const mdxPath = path.join(postsDirectory, `${slug}.mdx`);
+    const mdPath = path.join(postsDirectory, `${slug}.md`);
+    const fullPath = fs.existsSync(mdxPath) ? mdxPath : mdPath;
+    
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
     
@@ -53,9 +57,9 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
     const fileNames = fs.readdirSync(postsDirectory);
     const allPostsData = await Promise.all(
       fileNames
-        .filter(fileName => fileName.endsWith('.md'))
+        .filter(fileName => fileName.endsWith('.md') || fileName.endsWith('.mdx'))
         .map(async (fileName) => {
-          const slug = fileName.replace(/\.md$/, '');
+          const slug = fileName.replace(/\.(md|mdx)$/, '');
           return await getBlogPost(slug);
         })
     );
