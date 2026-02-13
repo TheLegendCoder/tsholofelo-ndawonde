@@ -24,6 +24,16 @@ const projects = [
     githubUrl: "https://github.com/TheLegendCoder/tsholofelo-ndawonde",
     imageHint: "personal website",
     type: "professional"
+  },
+  {
+    title: "Writeonce",
+    description: "Help creators turn long-form content into platform-optimized versions for target specific channels. A content transformation tool that enables creators to repurpose their work across multiple platforms efficiently.",
+    image: "https://djfeucuujeenuvappydk.supabase.co/storage/v1/object/public/public-images/personal-website/writeone.png",
+    tags: ["Next.js", "Supabase", "Tailwind CSS"],
+    liveUrl: "https://www.writeonce.co/",
+    githubUrl: "",
+    imageHint: "writeonce content platform",
+    type: "professional"
   }
 ] as const;
 
@@ -90,9 +100,9 @@ export default function ProjectsPage() {
                 celebrateOnClick={true}
                 celebrationIntensity="low"
                 className={`px-6 sm:px-8 lg:px-10 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
-                  !showPersonal
-                    ? 'bg-background text-primary'
-                    : 'text-white/80 hover:text-white'
+                  showPersonal
+                    ? 'bg-muted text-muted-foreground hover:bg-muted/80'
+                    : 'bg-primary text-white hover:bg-primary/90'
                 }`}
                 aria-label="Show professional projects"
               >
@@ -104,9 +114,9 @@ export default function ProjectsPage() {
                 celebrateOnClick={true}
                 celebrationIntensity="low"
                 className={`px-6 sm:px-8 lg:px-10 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
-                  showPersonal
-                    ? 'bg-background text-primary'
-                    : 'text-white/80 hover:text-white'
+                  !showPersonal
+                    ? 'bg-muted text-muted-foreground hover:bg-muted/80'
+                    : 'bg-primary text-white hover:bg-primary/90'
                 }`}
                 aria-label="Show personal projects"
               >
@@ -176,11 +186,13 @@ export default function ProjectsPage() {
                             <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
                           </Link>
                         </Button>
-                        <Button asChild variant="ghost" className="w-full sm:w-auto">
-                          <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                            <Github className="mr-2 h-4 w-4" /> Source Code
-                          </Link>
-                        </Button>
+                        {project.githubUrl && (
+                          <Button asChild variant="ghost" className="w-full sm:w-auto">
+                            <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                              <Github className="mr-2 h-4 w-4" /> Source Code
+                            </Link>
+                          </Button>
+                        )}
                       </div>
                     </CardFooter>
                   </Card>
