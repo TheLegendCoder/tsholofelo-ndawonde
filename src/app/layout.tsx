@@ -25,29 +25,30 @@ export const metadata = generateSEOMetadata({
   canonicalUrl: getSiteUrl(),
 });
 
+// Validate and sanitize Google Analytics ID
+// Moved outside component to avoid recreation on every render
+function validateGAId(gaId: string | undefined): string | null {
+  if (!gaId) return null;
+  
+  // Google Analytics ID format: G-XXXXXXXXXX (GA4) or UA-XXXXXXXXX-X (Universal Analytics)
+  // GA4 IDs can contain alphanumeric characters of variable length, case-insensitive
+  const gaIdPattern = /^(G-[A-Z0-9]+|UA-\d{4,10}-\d{1,4})$/i;
+  
+  // Validate format and ensure no special characters that could lead to XSS
+  if (gaIdPattern.test(gaId.trim())) {
+    return gaId.trim();
+  }
+  
+  // Log warning in development but don't expose in production
+  if (process.env.NODE_ENV === 'development') {
+    console.warn('Invalid Google Analytics ID format. Expected G-XXXXXXXXXX or UA-XXXXXXXXX-X');
+  }
+  
+  return null;
+}
+
 export default function Layout({ children }: LayoutProps) {
   const siteUrl = getSiteUrl();
-  
-  // Validate and sanitize Google Analytics ID
-  const validateGAId = (gaId: string | undefined): string | null => {
-    if (!gaId) return null;
-    
-    // Google Analytics ID format: G-XXXXXXXXXX (GA4) or UA-XXXXXXXXX-X (Universal Analytics)
-    const gaIdPattern = /^(G-[A-Z0-9]{10}|UA-\d{4,10}-\d{1,4})$/;
-    
-    // Validate format and ensure no special characters that could lead to XSS
-    if (gaIdPattern.test(gaId.trim())) {
-      return gaId.trim();
-    }
-    
-    // Log warning in development but don't expose in production
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Invalid Google Analytics ID format. Expected G-XXXXXXXXXX or UA-XXXXXXXXX-X');
-    }
-    
-    return null;
-  };
-  
   const validGAId = validateGAId(process.env.NEXT_PUBLIC_GA_ID);
   
   // Generate structured data schemas
