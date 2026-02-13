@@ -5,6 +5,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { generateSEOMetadata, getSiteUrl } from "@/lib/seo/metadata";
 import { 
   generateOrganizationSchema, 
@@ -91,14 +92,16 @@ export default function Layout({ children }: LayoutProps) {
           dangerouslySetInnerHTML={{ __html: generateJSONLD(personSchema) }}
         />
 
-        <div className="min-h-screen flex flex-col">
-          <Navbar />
-          <main className="flex-1 pt-16">
-            {children}
-          </main>
-          <Footer />
-          <Toaster />
-        </div>
+        <PostHogProvider>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-1 pt-16">
+              {children}
+            </main>
+            <Footer />
+            <Toaster />
+          </div>
+        </PostHogProvider>
       </body>
     </html>
   );
