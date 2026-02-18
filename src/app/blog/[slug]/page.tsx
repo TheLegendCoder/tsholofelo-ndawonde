@@ -8,6 +8,7 @@ import { generateSEOMetadata, getCanonicalUrl } from "@/lib/seo/metadata";
 import { generateBlogPostingSchema, generateJSONLD } from "@/lib/seo/structured-data";
 import { BreadcrumbWithSchema } from "@/components/ui/breadcrumb";
 import { generateBlogPostBreadcrumbs } from "@/lib/seo/breadcrumbs";
+import ShareButtons from "@/components/blog/share-buttons";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -137,6 +138,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               }}
             />
           </div>
+
+          {/* Share Buttons */}
+          <ShareButtons title={post.title} url={getCanonicalUrl(`/blog/${slug}`)} type="blog" />
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (

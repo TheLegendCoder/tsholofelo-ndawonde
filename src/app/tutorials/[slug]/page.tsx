@@ -8,6 +8,7 @@ import { generateSEOMetadata, getCanonicalUrl } from "@/lib/seo/metadata";
 import { generateBlogPostingSchema, generateJSONLD } from "@/lib/seo/structured-data";
 import { BreadcrumbWithSchema } from "@/components/ui/breadcrumb";
 import { generateBlogPostBreadcrumbs } from "@/lib/seo/breadcrumbs";
+import ShareButtons from "@/components/blog/share-buttons";
 
 interface TutorialPageProps {
   params: Promise<{
@@ -137,6 +138,9 @@ export default async function TutorialPage({ params }: TutorialPageProps) {
               }}
             />
           </div>
+
+          {/* Share Buttons */}
+          <ShareButtons title={tutorial.title} url={getCanonicalUrl(`/tutorials/${slug}`)} type="tutorial" />
 
           {/* Tags */}
           {tutorial.tags && tutorial.tags.length > 0 && (
