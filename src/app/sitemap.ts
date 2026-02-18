@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getAllBlogPosts } from '@/lib/blog';
+import { getAllBlogPosts, getAllTutorials } from '@/lib/blog';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tsholofelondawonde.co.za';
 
@@ -47,5 +47,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...blogPages];
+  // Dynamic tutorials
+  const tutorials = await getAllTutorials();
+  const tutorialPages: MetadataRoute.Sitemap = tutorials.map((tutorial) => ({
+    url: `${SITE_URL}/tutorials/${tutorial.slug}`,
+    lastModified: new Date(tutorial.date),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...blogPages, ...tutorialPages];
 }
